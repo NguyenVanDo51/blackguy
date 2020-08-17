@@ -1,0 +1,25 @@
+Danh sách model:
+user: id, name, password, email, role, course_id (quan hệ nhiều nhiều với course)
+
+course: id, name, description, author, user_id
+
+bảng liên kết giữa user và course:
+course_user: user_id, course_id, percent (% hoàn thành)
+
+bảng danh sách thể loại (php, js, html,...)
+category: id, name, description, course_id
+
+bảng các thẻ tags:
+tag: id, name, course_id
+
+bảng các bài trong 1 khóa học:
+lession: id, name, title, course_id,
+
+Bảng author để lưu thông tin tác giả
+
+Mối quan hệ:
+- course co quan hệ n-n voi user
+- course có quan hệ 1-n với tag
+- course có quan hệ 1-1 với category
+- course có quan hệ 1-n với lesion
+
