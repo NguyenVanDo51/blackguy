@@ -16,7 +16,8 @@ class CourseUser extends Migration
         Schema::create('course_user', function (Blueprint $table) {
             $table->bigInteger('user_id');
             $table->bigInteger('course_id');
-            $table->integer('percent');
+            $table->integer('latest')->default(0);
+            $table->timestamps();
         });
     }
 

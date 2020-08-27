@@ -16,8 +16,8 @@ class CreateTagsTable extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->bigInteger('course_id');
-            $table->timestamps();
+            $table->boolean('is_show')->default(false);
+            $table->bigInteger('course_id')->nullable();
         });
     }
 

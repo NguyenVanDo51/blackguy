@@ -2,11 +2,12 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Model;
+
 use Faker\Generator as Faker;
 
-$factory->define(Model::class, function (Faker $faker) {
+$factory->define(App\Models\Course::class, function (Faker $faker) {
     return [
-        //
+        'name' => 'Ruby ' . $faker->text(20),
+        'description' => $faker->text(150)
     ];
 });

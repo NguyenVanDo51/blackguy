@@ -13,7 +13,10 @@ class CourseCategory extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('course_category', function (Blueprint $table) {
+            $table->bigInteger('course_id');
+            $table->bigInteger('category_id');
+        });
     }
 
     /**
@@ -23,6 +26,6 @@ class CourseCategory extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('category_course');
     }
 }

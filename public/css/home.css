@@ -1,0 +1,47 @@
+.category {
+    /*position: relative;*/
+}
+
+.category .nav-link {
+    min-width: 5rem;
+}
+
+.sub-category {
+    position: absolute;
+    left: 0;
+    display: none;
+    width: 100vw;
+    box-shadow: -1px 3px 3px;
+    min-height: 3rem;
+    align-content: center;
+    background: #23272b;
+}
+
+.category:hover .sub-category {
+    display: flex;
+    cursor: pointer;
+}
+
+.sub-category-tag {
+    color: white;
+    display: block;
+    line-height: 2rem;
+}
+
+.sub-category-tag:hover {
+    color: #1d68a7;
+    text-decoration: none;
+}
+
+a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+/* End navbar */
+
+/* Start course newest */
+
+.course-item:hover {
+    text-decoration: none;
+}

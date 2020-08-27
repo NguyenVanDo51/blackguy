@@ -8,8 +8,15 @@ class Tag extends Model
 {
     protected $guarded = [];
 
-    public function course()
+    public $timestamps = false;
+
+    public function courses()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsToMany(Course::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_tag');
     }
 }

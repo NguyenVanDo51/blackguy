@@ -13,7 +13,10 @@ class CourseTag extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('course_tag', function (Blueprint $table) {
+            $table->bigInteger('course_id');
+            $table->bigInteger('tag_id');
+        });
     }
 
     /**
@@ -23,6 +26,6 @@ class CourseTag extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('course_tag');
     }
 }

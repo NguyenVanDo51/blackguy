@@ -13,7 +13,10 @@ class CategoryTag extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('category_tag', function (Blueprint $table) {
+            $table->bigInteger('tag_id');
+            $table->bigInteger('category_id');
+        });
     }
 
     /**
@@ -23,6 +26,6 @@ class CategoryTag extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('category_tag');
     }
 }

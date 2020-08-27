@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Lession;
 use Illuminate\Database\Seeder;
 
 class LessionSeeder extends Seeder
@@ -11,6 +12,8 @@ class LessionSeeder extends Seeder
      */
     public function run()
     {
-        //
+//        Lession::query()->insert([
+//
+//        ]);
     }
 }
