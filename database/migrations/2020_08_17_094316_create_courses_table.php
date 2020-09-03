@@ -18,6 +18,7 @@ class CreateCoursesTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('img');
+            $table->string('crawl_url')->nullable();
             $table->bigInteger('category_id');
             $table->string('views')->default(0);
             $table->timestamps();

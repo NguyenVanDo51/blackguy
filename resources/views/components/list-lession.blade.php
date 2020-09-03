@@ -20,10 +20,9 @@
                             @endif
                             @endauth
                             <span class="ml-2">{{$loop->index + 1}}.</span>
-                            {{$item->name}}
+                            {{$item->title}}
                         </a>
                     </div>
-
                     @endforeach
             </div>
 </div>

@@ -21,17 +21,15 @@ class AdminController extends Controller
         ];
     }
 
-    public function dashboard($function = 'dashboard', Course $course, Lession $lession)
+    public function courses()
     {
         try {
             $courses = Course::query()->orderByDesc('created_at')->paginate(10);
-            $tags = Tag::query()->get();
-            $categories = Category::query()->get();
         } catch (Exception $exception) {
             echo $exception;
         }
 
-        return view('pages.admin.dashboard', compact('function', 'courses', 'tags', 'categories', 'course', 'lession'));
+        return view('pages.admin.course', compact('courses'));
     }
 
     public function addCourse(Request $request)
@@ -89,9 +87,16 @@ class AdminController extends Controller
      * Show form Sua course
      */
 
-    public function editCourse()
+    public function editCourse(Course $course)
     {
-        return redirect()->route('admin', 'edit-course');
+        try {
+            $tags = Tag::query()->get();
+            $categories = Category::query()->get();
+        } catch (Exception $e) {
+            dd($e);
+        }
+
+        return view('pages.admin.editcourse', compact('course', 'tags', 'categories'));
     }
 
     /**
@@ -123,16 +128,34 @@ class AdminController extends Controller
             'user_id' => Auth::id()
         ]);
 
-
         $course->tags()->sync($tags);
 
-        // attach khoa hoc va tag
-//        Tag::query()->findMany($tags_id)->each(function ($tag) use ($course) {
-//            $tag->courses()->attach($course->id);
-//        });
-//        }
+        return redirect()->route('admin', $course->id);
+    }
 
-        return redirect()->route('admin', 'course');
+    /**
+     *
+     * View lession
+     *
+     */
+    public function viewLessions(Course $course)
+    {
+        $lessions = $course->lessions()->orderBy('lession')->paginate(7);
+
+        return view('pages.admin.lession', compact('lessions', 'course'));
+    }
+
+    public function viewAddLession(Course $course) {
+
+        return view('pages.admin.addlession', compact('course'));
+    }
+
+    /**
+     * View edit lession
+     */
+    public function viewEditLession(Course $course, Lession $lession)
+    {
+        return view('pages.admin.editlession', compact('course', 'lession'));
     }
 
     /**
@@ -141,7 +164,6 @@ class AdminController extends Controller
 
     public function addLession(Request $request, Course $course)
     {
-
         $lessions_avai = $course->lessions()->pluck('lession')->toArray();
 
         $request->validate([
@@ -155,7 +177,7 @@ class AdminController extends Controller
             'title' => $request->title,
             'video' => $request->video
         ]);
-        return redirect()->route('admin', ['function' => 'lession', 'course' => $course->id]);
+        return redirect()->route('view-lession', $course->id);
     }
 
     /**
@@ -164,9 +186,14 @@ class AdminController extends Controller
     public function removeLession(Lession $lession)
     {
         $course_id = $lession->course_id;
-        $lession->delete();
-        $lession->users()->detach();
-        return redirect()->route('admin', ['function' => 'lession', 'course' => $course_id]);
+        try {
+            $lession->delete();
+            $lession->users()->detach();
+        } catch (Exception $e) {
+            dd($e);
+        }
+
+        return redirect()->route('view-lession', $course_id);
     }
 
     /**
@@ -174,7 +201,14 @@ class AdminController extends Controller
      */
     public function handleEditLession(Request $request, Course $course, Lession $lession)
     {
-        $lessions_avai = $course->lessions()->pluck('lession')->toArray();
+        try {
+            $lessions_avai = $course->lessions()
+                ->where('id', '<>', $lession->id)
+                ->pluck('lession')->toArray();
+
+        } catch (Exception $e) {
+            dd($e);
+        }
 
         $request->validate([
             'lession' => ['required', Rule::notIn($lessions_avai)],
@@ -182,13 +216,19 @@ class AdminController extends Controller
             'video' => 'starts_with:https://www.youtube.com/watch?v='
         ]);
 
-        $lession->update([
-            'lession' => $request->lession,
-            'title' => $request->title,
-            'video' => $request->video
-        ]);
+        try {
+            $lession->update([
+                'lession' => $request->lession,
+                'title' => $request->title,
+                'video' => $request->video
+            ]);
 
-        $lession->users()->detach();
+            $lession->users()->detach();
+        } catch (Exception $e) {
+            dd($e);
+        }
+
+        return redirect()->route('view-lession', $course->id);
     }
 
 }

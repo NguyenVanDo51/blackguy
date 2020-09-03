@@ -1,6 +1,8 @@
-@props(['tags', 'categories'])
-
-
+@extends('templade.dashboard')
+@section('course')
+    btn-primary
+@endsection
+@section('content')
 <div class="w-50 mx-auto">
     <form method="POST" action="{{route('add-course')}}">
         @csrf()
@@ -10,14 +12,13 @@
         </div>
         <div class="form-group">
             <label for="img">Hình ảnh (url)</label>
-{{--            <input type="file" class="form-control-file" id="img" name="img">--}}
             <input type="text" class="form-control" id="img" name="img" placeholder="Url hình ảnh">
         </div>
 
         <div class="form-group">
             <label for="category">Danh mục</label>
             <select class="custom-select" id="category" name="category">
-                @foreach($categories as $category)
+                @foreach(App\Models\Category::query()->get() as $category)
                     <option class="text-uppercase" value="{{$category->id}}">{{$category->name}}</option>
                 @endforeach
             </select>
@@ -26,7 +27,7 @@
         <div class="form-group">
             <label for="tags">Thẻ (Nhấn giữ ctrl khi chọn để chọn nhiều mục)</label>
             <select multiple class="form-control" id="tags" name="tags[]">
-                @foreach($tags as $tag)
+                @foreach(App\Models\Tag::query()->get() as $tag)
                     <option class="text-uppercase" value="{{$tag->id}}">{{$tag->name}}</option>
                 @endforeach
             </select>
@@ -47,3 +48,4 @@
     </form>
 </div>
 
+@endsection

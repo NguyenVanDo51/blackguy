@@ -10,7 +10,7 @@
                 <div>
                     <span>Views: {{$course->view}}</span>
                     <span class="mr-3">Likes: {{$course->like}}</span>
-                    <p>Tác giả: {{\App\User::query()->findOrFail($course->user_id)->name}}</p>
+                    <p>Tác giả: {{\App\User::query()->findOrFail($course->user_id)->name ?? "admin"}}</p>
                 </div>
             </div>
         </a>

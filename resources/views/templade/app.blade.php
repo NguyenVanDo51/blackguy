@@ -77,14 +77,14 @@
             <div class="btn-group">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
-                    <i class="fas fa-user-circle"></i>
+                    {{Auth::user()->name}}
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a href="{{route('profile')}}" class="dropdown-item" type="button">{{Auth::user()->name}}</a>
+                    <a href="{{route('profile')}}" class="dropdown-item" type="button">Trang cá nhân</a>
                     <div class="dropdown-divider"></div>
 
                     @can('admin')
-                        <a href="{{route('admin', 'dashboard')}}" class="dropdown-item">Quản lý web</a>
+                        <a href="{{route('admin')}}" class="dropdown-item">Quản lý web</a>
                     @endcan
 
                     <div class="dropdown-divider"></div>

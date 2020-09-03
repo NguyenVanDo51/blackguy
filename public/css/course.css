@@ -8,3 +8,11 @@
 .lession:hover a {
     color: white;
 }
+
+a {
+    color: black;
+}
+
+a div {
+    color: black;
+}

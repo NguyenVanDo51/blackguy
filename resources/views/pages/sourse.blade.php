@@ -7,7 +7,13 @@
             <div class="col-2"></div>
             <div class="col-8">
                 <h2>{{$course->name}}</h2>
-                <p>Tác giả: {{ App\User::query()->findOrFail($course->user_id)->name ?? "Admin"}}</p>
+                <p>Tác giả:
+                    @if( empty($course->user_id))
+                        Admin
+                    @else
+                        {{ App\User::query()->findOrFail($course->user_id)->name ?? "Admin"}}
+                    @endif
+                </p>
                 <span>Lượt thích: {{$course->like}}</span>
                 <span class="mx-3">Lượt xem: {{$course->view}}</span>
                 <span>Số bai hoc: {{$course->lessions()->count()}}</span>

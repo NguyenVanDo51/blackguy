@@ -1,9 +1,12 @@
-@props(['course', 'lession'])
-
-    <h2>Sửa video {{$lession->lession}}-{{$lession->title}} trong khóa học '{{$course->name}}'</h2>
+@extends('templade.dashboard')
+@section('course')
+    btn-primary
+@endsection
+@section('content')
+<h2>Sửa video {{$lession->lession}}-{{$lession->title}} trong khóa học '{{$course->name}}'</h2>
 
 <div class="w-50 mx-auto">
-    <form method="POST" action="{{route('add-lession', $course->id)}}">
+    <form method="POST" action="{{route('handle-edit-lession', ['course' => $course->id, 'lession' => $lession->id])}}">
         @csrf()
         <div class="form-group">
             <label for="lession">Số thứ tự (hiện tại)</label>
@@ -31,3 +34,4 @@
         @endif
     </form>
 </div>
+@endsection

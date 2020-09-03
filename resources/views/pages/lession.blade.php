@@ -7,7 +7,13 @@
             <div class="col-2"></div>
             <div class="col-10">
                 <h2>{{$course->name}}</h2>
-                <p>Tác giả: {{ App\User::query()->findOrFail($course->user_id)->name ?? "Admin"}}</p>
+                <p>
+                    Tác giả:
+                    @if(empty($course->user_id))
+                        Admin
+                    @else
+                        {{ App\User::query()->findOrFail($course->user_id)->name ?? "Admin"}}</p>
+                    @endif
 
             </div>
         </div>
@@ -24,16 +30,18 @@
         <div class="row py-3 px-0">
             <div class="col-12 col-md-7">
                 <div class="w-100 h-100 position-relative">
-                    <div id="player"class="position-absolute"
+                    <div id="player" class="position-absolute"
                          style="top: 0; left: 0; width: 100%; height: 100%;"></div>
-                    <input class="d-none" type="text" id="video" name="video" value="{{Str::after($lession->video, 'watch?v=')}}" />
+                    <input class="d-none" type="text" id="video" name="video"
+                           value="{{Str::after($lession->video, 'watch?v=')}}"/>
                 </div>
             </div>
-            <input class="d-none" type="text" value="{{$course->id}}" id='course_id' />
-            <input class="d-none" type="text" value="{{$lession->id}}" id='lession_id' />
-{{--            {{dd(Auth::user()->lessions()->where('lession_id', $lession->id)->first()->pivot->timer)}}--}}
+            <input class="d-none" type="text" value="{{$course->id}}" id='course_id'/>
+            <input class="d-none" type="text" value="{{$lession->id}}" id='lession_id'/>
+            {{--            {{dd(Auth::user()->lessions()->where('lession_id', $lession->id)->first()->pivot->timer)}}--}}
             <input class="d-none" type="text"
-                   value="{{Auth::user()->lessions()->where('lession_id', $lession->id)->first()->pivot->timer}}" id='timer' />
+                   value="{{Auth::user()->lessions()->where('lession_id', $lession->id)->first()->pivot->timer}}"
+                   id='timer'/>
             <div class="col-12 col-md-5 mt-5 mt-md-0">
                 <x-list-lession :course="$course"/>
             </div>
@@ -91,7 +99,7 @@
                 const lession_id = $('#lession_id').val();
                 const total = player.getDuration();
                 // console.log(total);
-                $.get('http://blackguy.test/handle',{timer: timer, total: total, lession_id: lession_id});
+                $.get('http://blackguy.test/handle', {timer: timer, total: total, lession_id: lession_id});
             }
         </script>
 
