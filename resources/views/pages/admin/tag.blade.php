@@ -47,7 +47,7 @@
 
 
     <h4 class="mt-3">Danh sách thẻ</h4>
-    <table class="table table-hover table-dark overflow-auto mx-auto w-50">
+    <table class="table table-hover table-striped overflow-auto mx-auto w-50">
         <thead>
         <tr>
             <th scope="col">Tên thẻ</th>

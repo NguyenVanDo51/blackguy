@@ -15,7 +15,7 @@
             @endif
         </form>
     </div>
-    <table class="table table-hover table-dark">
+    <table class="table table-hover table-striped">
         <thead>
         <tr>
             <th scope="col">Tên</th>

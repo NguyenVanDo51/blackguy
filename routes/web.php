@@ -41,7 +41,7 @@ Route::get('mail', function () {
     return Hash::make('adminadmin');
 });
 
-Route::middleware('can:admin')->group(function () {
+Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::get('admin/view/course', [AdminController::class, 'courses'])->name('admin');
 
     Route::view('admin/edit/course/create', 'pages.admin.addcourse')->name('view-add-course');
@@ -54,7 +54,10 @@ Route::middleware('can:admin')->group(function () {
 
     Route::post('admin/course/edit-course/success/{course}', [AdminController::class, 'handleEditCourse'])->name('handle-edit-course');
 
+    Route::get('admin/course/search', [CourseController::class, 'search'])->name('admin-course-search');
 
+
+    // Lession
     Route::get('admin/view/lession/{course}', [AdminController::class, 'viewLessions'])->name('view-lession');
 
     Route::get('admin/course/lession/create/{course}', [AdminController::class, 'viewAddLession'])->name('view-add-lession');
@@ -76,7 +79,7 @@ Route::middleware('can:admin')->group(function () {
 
     Route::get('admin/users/remove/{user}', [UserController::class, 'remove'])->name('admin-user-remove');
 
-    Route::post('admin/users/password/{user}', [UserController::class, 'changePassword'])->name('admin-user-edit');
+    Route::post('admin/users/password/{user}', [UserController::class, 'changePasswordAdmin'])->name('admin-user-edit');
 
 // Tags
     Route::get('admin/tags/view', [TagController::class, 'show'])->name('admin-tag-view');
@@ -88,15 +91,17 @@ Route::middleware('can:admin')->group(function () {
     Route::post('admin/tags/home', [TagController::class, 'showHome'])->name('admin-tag-home');
 
 // Crawl
-    Route::get('/admin/crawl/course', [CrawlController::class, 'show'])->name('admin-crawl-view');
+    Route::get('/admin/crawl/course', [CrawlController::class, 'index'])->name('admin-crawl-view');
 
-    Route::post('admin/crawl/course/handle', [CrawlController::class, 'crawl'])->name('admin-crawl-handle');
+    Route::post('admin/crawl/course/handle', [CrawlController::class, 'create'])->name('admin-crawl-handle');
 
-    Route::get('admin/crawl/course/remove/{job_id}', [CrawlController::class, 'remove'])->name('admin-crawl-remove');
+    Route::get('admin/crawl/course/remove/{ProcessCrawl}', [CrawlController::class, 'destroy'])->name('admin-crawl-remove');
 
-    Route::post('admin/crawl/course/failed-redispatch/', [CrawlController::class, 'failedRedispatch'])->name('admin-crawl-failed-redispatch');
+    Route::get('admin/crawl/course/failed-redispatch/{ProcessCrawl}', [CrawlController::class, 'update'])->name('admin-crawl-failed-redispatch');
 
-    Route::get('admin/crawl/course/failed-remove/{job_id}', [CrawlController::class, 'failedRemove'])->name('admin-crawl-failed-remove');
+    Route::get('admin/crawl/course/{job_id}/show', [CrawlController::class, 'show'])->name('admin-crawl-show');
+
+    Route::post('admin/crawl/course/{job_id}/edit', [CrawlController::class, 'edit'])->name('admin-crawl-edit');
 
 
 });

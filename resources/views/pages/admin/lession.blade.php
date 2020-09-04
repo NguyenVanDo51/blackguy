@@ -8,7 +8,7 @@
 <h3>Các bài học trong khóa {{$course->name}}</h3>
 <a class="btn btn-primary float-right mb-2" href="{{route('view-add-lession', $course->id)}}">Thêm</a>
 
-<table class="table table-hover table-dark">
+<table class="table table-hover table-striped">
     <thead>
     <tr>
         <th scope="col">Bài</th>

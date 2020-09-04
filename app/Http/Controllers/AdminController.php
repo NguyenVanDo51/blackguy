@@ -25,8 +25,9 @@ class AdminController extends Controller
     {
         try {
             $courses = Course::query()->orderByDesc('created_at')->paginate(10);
+//            dd($courses);
         } catch (Exception $exception) {
-            echo $exception;
+            logger($exception);
         }
 
         return view('pages.admin.course', compact('courses'));

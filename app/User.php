@@ -54,4 +54,9 @@ class User extends Authenticatable implements MustVerifyEmail
             ->withPivot(['timer', 'course'])
             ->withTimestamps();
     }
+
+    public function processCrawl()
+    {
+        return $this->belongsTo(ProcessCrawl::class);
+    }
 }

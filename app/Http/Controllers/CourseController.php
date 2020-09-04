@@ -57,4 +57,17 @@ class CourseController extends Controller
             'category' => $category
         ]);
     }
+
+    public function search(Request $request)
+    {
+        $courses = Course::query()
+            ->where('name', 'like', '%' . $request->input('course_name') . '%')
+//            ->where('name', 'like', '%web%')
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        $search = true;
+
+        return view('pages.admin.course', compact('courses', 'search'));
+    }
 }

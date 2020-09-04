@@ -6,8 +6,26 @@
 
 @section('content')
     <h1>Quản lý khóa học</h1>
-    <a class="btn btn-primary float-right mb-2" href="{{route('view-add-course')}}">Thêm khóa học</a>
-    <table class="table table-hover table-dark">
+    <div>
+        <form action="{{route('admin-course-search')}}" method="GET">
+            @csrf
+            <div class="form-inline">
+                <input type="text" name="course_name" class="form-control mr-2" placeholder="Tìm kiếm theo tên">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+                @if(!empty($search) && $search == true)
+                    <a href="{{route('admin')}}" type="button" class="btn btn-danger ml-2">
+                        <i class="fas fa-times"></i>
+                    </a>
+                @endif
+            </div>
+
+        </form>
+        <a class="btn btn-primary float-right mb-2" href="{{route('view-add-course')}}">Thêm khóa học</a>
+    </div>
+
+    <table class="table table-hover table-striped">
         <thead>
         <tr>
             <th scope="col">Tên</th>

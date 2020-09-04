@@ -59,7 +59,7 @@ class HomeController extends Controller
             // tim kiem khoa hoc tren tat ca the loai
             try {
                 $result = Course::where('name', 'like', '%' . $search . '%')
-                    ->paginate(1);
+                    ->paginate(4);
                 $data = Arr::add($data, 'courses', $result);
             } catch (Exception $e) {
                 return $e;
@@ -71,17 +71,13 @@ class HomeController extends Controller
 //
                 $category = Category::query()->findOrFail($option);
 
-                $result = $category->courses()->where('name', 'like', '%' . $search . '%')->paginate(1);
+                $result = $category->courses()->where('name', 'like', '%' . $search . '%')->paginate(4);
 
                 $data = Arr::add($data, 'courses', $result);
             } catch (Exception $e) {
                 return $e;
             }
         }
-
-//        dd(new Paginator())
-
-//        dd($result->total());
 
         return view('pages.search', $data);
     }
@@ -101,7 +97,7 @@ class HomeController extends Controller
                 $percent = round(($is_finish / $total) * 100);
             }
         } catch (Exception $exception) {
-            echo($exception);
+            logger($exception);
         }
 
         return view('pages.sourse', compact('course', 'percent'));

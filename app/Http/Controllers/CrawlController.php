@@ -2,84 +2,103 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\ProcessCourse;
-use App\Models\Course;
-use App\Models\Tag;
+use App\Jobs\ProcessCrawlJob;
+use App\ProcessCrawl;
 use App\User;
-use DiDom\Element;
-use DiDom\Exceptions\InvalidSelectorException;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use DiDom\Document;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class CrawlController extends Controller
 {
-
-    public function show()
+    public function index()
     {
-        $jobs = DB::table('jobs')->get();
-        $failed_jobs = DB::table('failed_jobs')->get();
-//        dd(str_replace('\\', '', Str::between($jobs[0]->payload, 's:49:\"', '";s:7:')));
-        return view('pages.admin.crawl', compact('jobs', 'failed_jobs'));
+        $jobs = ProcessCrawl::query()->orderByDesc('id')->paginate(10);
+        return view('pages.admin.crawl', compact('jobs'));
     }
 
     /**
-     * @throws InvalidSelectorException
-     * @var $title Element[]
-     * @var $course Course
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function crawl(Request $request)
+    public function create(Request $request)
     {
-        $urls = Course::query()->pluck('crawl_url');
+        $urls = ProcessCrawl::query()->pluck('url');
         $request->validate([
-            'url' => ['starts_with:https://coderstape.com/', Rule::notIn($urls)]
+            'url' => ['starts_with:https://coderstape.com/',
+                Rule::notIn($urls)]
         ]);
 
-        $url = $request->input('url');
+        $user = User::query()->findOrFail(Auth::id());
 
-        ProcessCourse::dispatch($url);
+        $job = $user->processCrawl()->create([
+            'url' => $request->input('url'),
+            'user_id' => Auth::id(),
+            'status' => ProcessCrawl::STATUS_PENDING
+        ]);
+
+        // Day vao queue
+        ProcessCrawlJob::dispatch($job);
 
         return back();
     }
 
-    public function remove($jod_id)
+    public function destroy($processCrawl)
     {
         try {
-            DB::table('jobs')->delete($jod_id);
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
+            ProcessCrawl::query()->findOrFail($processCrawl)->delete();
+        } catch (Exception $e) {
+            logger($e->getMessage() . $e->getTraceAsString());
         }
 
         return back();
     }
 
-    public function failedRedispatch(Request $request)
+    public function update($job_id)
     {
-        $url = 'https://' . $request->url;
-        $job_id = $request->job;
-
-        ProcessCourse::dispatch($url);
-
         try {
-            DB::table('failed_jobs')->delete($job_id);
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
+            $crawlJob = ProcessCrawl::query()->findOrFail($job_id);
+            ProcessCrawlJob::dispatch($crawlJob);
+        } catch (Exception $e) {
+            dd($e);
         }
         return back();
     }
 
-    public function failedRemove($jod_id)
+    public function show($job_id)
     {
         try {
-            DB::table('failed_jobs')->delete($jod_id);
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
+            $job = ProcessCrawl::query()->findOrFail($job_id);
+            return view('pages.admin.editcrawl', compact('job'));
+        } catch (Exception $exception) {
+            dd($exception);
         }
-        return back();
     }
 
+    public function edit(Request $request, $job_id)
+    {
+        try {
+            $urls = ProcessCrawl::query()->pluck('url');
+            $request->validate([
+                'url' => ['starts_with:https://coderstape.com/',
+                    Rule::notIn($urls)]
+            ]);
+
+            // Sua thong tin
+            $crawlJob = ProcessCrawl::query()->findOrFail($job_id);
+
+            $crawlJob->update([
+                'url' => $request->input('url')
+            ]);
+
+        } catch (Exception $exception) {
+            logger($exception);
+        }
+
+        return redirect()->route('admin-crawl-view');
+    }
 
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -62,8 +63,7 @@ class UserController extends Controller
     public function changePassword(Request $request, User $user)
     {
         $request->validate([
-            'password' => ['required', 'min:8', 'confirmed'],
-//            're_password' => Rule::in([$request->input('password')])
+            'password' => ['required', 'min:8', 'confirmed']
         ]);
 
         try {
@@ -73,6 +73,26 @@ class UserController extends Controller
         } catch (Exception $e) {
 
         }
+
+        return redirect()->back();
+    }
+
+    public function changePasswordAdmin(Request $request, User $user)
+    {
+        dd($user);
+        $request->validate([
+            'password' => ['required', 'min:8']
+        ]);
+
+        try {
+            $user->update([
+                'password' => Hash::make($request->input('password'))
+            ]);
+        } catch (Exception $e) {
+
+        }
+
+
 
         return redirect()->back();
     }

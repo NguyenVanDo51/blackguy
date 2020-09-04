@@ -15,7 +15,7 @@
             <i class="fas fa-trash"></i>
         </a>
 
-        <form method="POST" action="{{route('admin-user-edit', $user->id)}}" id="password{{$user->id}}" class="collapse position-absolute form-inline" style="z-index: 10; top: 100%; right: 0;">
+        <form method="POST" action="{{route('admin-user-edit', $user->id)}}" name="password" id="password{{$user->id}}" class="collapse position-absolute form-inline" style="z-index: 10; top: 100%; right: 0;">
 
             @csrf
 

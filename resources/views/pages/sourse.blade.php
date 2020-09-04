@@ -17,28 +17,35 @@
                 <span>Lượt thích: {{$course->like}}</span>
                 <span class="mx-3">Lượt xem: {{$course->view}}</span>
                 <span>Số bai hoc: {{$course->lessions()->count()}}</span>
-                <p class="my-2">
-                @if($course->users()->get()->contains(Auth::user()))
-                    <div class="progress my-3">
-                        <div class="progress-bar" role="progressbar" style="width: {{$percent}}%;" aria-valuenow="25"
-                             aria-valuemin="0" aria-valuemax="100">
-                            {{$percent}}%
+                @if(!empty($course->lessions()->first()))
+                    <p class="my-2">
+                    @if($course->users()->get()->contains(Auth::user()))
+                        <div class="progress my-3">
+                            <div class="progress-bar" role="progressbar" style="width: {{$percent}}%;"
+                                 aria-valuenow="25"
+                                 aria-valuemin="0" aria-valuemax="100">
+                                {{$percent}}%
+                            </div>
                         </div>
-                    </div>
-                    <a href="{{ route('lession', ['course' => $course->id, 'lession' => Auth::user()->courses()->where('course_id', $course->id)->first()->pivot->latest]) }}"
-                       class="btn btn-primary mr-2">
-                        Tiếp tục học
-                    </a>
-                @else
-                    <a href="{{ route('lession', ['course' => $course->id, 'lession' => $course->lessions()->first('id')->id]) }}"
-                       class="btn btn-primary mr-2">
-                        Đăng kí ngay
-                    </a>
-                @endif
-                @guest
-                    <label for="" class="text-danger"> * Bạn cần đăng nhập để tiếp tục </label>
-                    @endguest
-                    </p>
+                        <a href="{{ route('lession', ['course' => $course->id, 'lession' => Auth::user()->courses()->where('course_id', $course->id)->first()->pivot->latest]) }}"
+                           class="btn btn-primary mr-2">
+                            Tiếp tục học
+                        </a>
+                    @else
+                        <a href="{{ route('lession', ['course' => $course->id, 'lession' => $course->lessions()->first('id')->id]) }}"
+                           class="btn btn-primary mr-2">
+                            Đăng kí ngay
+                        </a>
+                    @endif
+                    @guest
+                        <label for="" class="text-danger"> * Bạn cần đăng nhập để tiếp tục </label>
+                        @endguest
+                        </p>
+                    @else
+                        <div class="my-3 mr-2">
+                            <button class="btn btn-secondary">Sắp ra mắt</button>
+                        </div>
+                    @endif
             </div>
             <div class="col-2"></div>
         </div>
@@ -62,9 +69,11 @@
                 <p>{{$course->name}}</p>
             </div>
 
-            <div class="col-12 mt-5">
-                <x-list-lession :course="$course"/>
-            </div>
+            @if(!empty($course->lessions()->first()))
+                <div class="col-12 mt-5">
+                    <x-list-lession :course="$course"/>
+                </div>
+            @endif
         </div>
 
 @endsection
