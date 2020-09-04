@@ -7,39 +7,25 @@ use App\Models\Course;
 use App\Models\Tag;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use mysql_xdevapi\Exception as ExceptionAlias;
 
 class HomeController extends Controller
 {
-    public $data;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index()
     {
         try {
-            $categories = Category::query()->with('tags')->get();
-            // Lay ra tat ca cac tag co is_show = 1 de hien thi ra trang chu
-            $tags = Tag::query()->where('is_show', 1)->get();
-            $this->data = [
-                'categories' => $categories,
-                'tags' => $tags
-            ];
-
-        } catch (ExceptionAlias $exception) {
+            return view('pages.home', $this->getData());
+        } catch (Exception $exception) {
             echo $exception;
         }
     }
 
-    public function index()
+    protected function getData()
     {
-        return view('pages.home', $this->data);
+        return [
+            'categories' => Category::query()->with('tags')->get(),
+            'tags'       => Tag::query()->where('is_show', 1)->get()
+        ];
     }
 
     public function search(Request $req)
@@ -51,30 +37,33 @@ class HomeController extends Controller
         $option = $req->input('option');
         $search = $req->input('search');
 
-        $data = Arr::add($this->data, 'option', $option);
-        $data = Arr::add($data, 'search', $search);
+        $data           = $this->getData();
+        $data['option'] = $option;
+        $data['search'] = $search;
 
         if ($option == null) {
             // tim kiem khoa hoc tren tat ca the loai
             try {
-                $result = Course::where('name', 'like', '%' . $search . '%')
+                $data['courses'] = Course::where('name', 'like', '%'.$search.'%')
                     ->paginate(4);
-                $data = Arr::add($data, 'courses', $result);
             } catch (Exception $e) {
-                return $e;
+                logger('Exception when search', [
+                    'exception' => $e
+                ]);
+                abort(500);
             }
 
         } else {
             // Tim kiem co the loai
             try {
-//
                 $category = Category::query()->findOrFail($option);
 
-                $result = $category->courses()->where('name', 'like', '%' . $search . '%')->paginate(4);
-
-                $data = Arr::add($data, 'courses', $result);
+                $data['courses'] = $category->courses()->where('name', 'like', '%'.$search.'%')->paginate(4);
             } catch (Exception $e) {
-                return $e;
+                logger('Exception when search', [
+                    'exception' => $e
+                ]);
+                abort(500);
             }
         }
 
@@ -92,8 +81,8 @@ class HomeController extends Controller
                     ->where('is_finish', 1)
                     ->where('course', $course->id)
                     ->count();
-                $total = $course->lessions()->count();
-                $percent = round(($is_finish / $total) * 100);
+                $total     = $course->lessions()->count();
+                $percent   = round(($is_finish / $total) * 100);
             }
         } catch (Exception $exception) {
             logger($exception);

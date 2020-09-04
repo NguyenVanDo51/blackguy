@@ -21,7 +21,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/search/{category?}', [HomeController::class, 'search'])->name('search');
 
-Auth::routes(['verify' => false]);
+Auth::routes(['verify' => true]);
 
 Route::get('/view/course/{course}', [HomeController::class, 'viewCourse'])->name('course');
 

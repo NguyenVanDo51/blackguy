@@ -16,10 +16,11 @@ class CreateCoursesTable extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('description');
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->text('description');
             $table->string('img');
             $table->string('crawl_url')->nullable();
-            $table->bigInteger('category_id');
+            $table->foreignId('category_id')->nullable()->references('id')->on('categories');
             $table->string('views')->default(0);
             $table->timestamps();
         });
