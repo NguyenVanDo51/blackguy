@@ -35,7 +35,6 @@ class HomeController extends Controller
         } catch (ExceptionAlias $exception) {
             echo $exception;
         }
-
     }
 
     public function index()
