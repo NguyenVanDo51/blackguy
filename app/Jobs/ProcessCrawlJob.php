@@ -20,6 +20,8 @@ class ProcessCrawlJob implements ShouldQueue
 
     public ProcessCrawl $processCrawl;
 
+    public $timeout = 500;
+
     /**
      * Create a new job instance.
      *

@@ -1,5 +1,5 @@
 @props(['course'])
-<a href="{{route('course', $course->id)}}">
+<a href="{{route('course.show', $course->id)}}">
     <div class="card course-item" style="height: 22rem; color: black;">
         <img class="card-img-top" src="{{$course->img ?? ""}}" alt="Card image cap" style="height: 9rem;">
 

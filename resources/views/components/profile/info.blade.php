@@ -22,7 +22,7 @@
                 <div class="card-group my-3">
                     @foreach(Auth::user()->courses()->get() as $course)
                         <div class="col-3 my-3">
-                            <a href="{{route('course', $course->id)}}" class="text-dark">
+                            <a href="{{route('course.show', $course->id)}}" class="text-dark">
                                 <img class="card-img-top" src="{{$course->img ?? ""}}" alt="Card image cap">
                                 <div class="card-text m-1">{{$course->name}}</div>
                                 <div class="card-text bg-secondary text-light pl-1">

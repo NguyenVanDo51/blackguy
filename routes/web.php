@@ -1,45 +1,47 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CrawlController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LessionController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
-use App\Jobs\ProcessCourse;
-use App\Mail\Register;
-use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/test', function () {
+    $tag = app()->make('tag');
+
+    return $tag->getIsShow();
+});
 
 Route::redirect('home', '/');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/search/{category?}', [HomeController::class, 'search'])->name('search');
+Route::get('/search', [CourseController::class, 'searchWithCategory'])->name('course.search');
 
 Auth::routes(['verify' => true]);
 
-Route::get('/view/course/{course}', [HomeController::class, 'viewCourse'])->name('course');
+Route::get('/view/course/{course}', [CourseController::class, 'show'])->name('course.show');
 
-Route::get('/view/tags/{tag}', [CourseController::class, 'tags'])->name('tags');
+Route::get('/view/tags/{tag}', [TagController::class, 'show'])->name('tag.show');
 
-Route::get('/view/categories/{category}', [CourseController::class, 'categories'])->name('categories');
+Route::get('/view/categories/{category}', [CategoryController::class, 'show'])->name('category.show');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/view/course/{course}/lession/{lession}', [CourseController::class, 'lession'])->name('lession');
+    Route::get('/view/course/{course}/lession/{lession}', [LessionController::class, 'show'])->name('lession.index');
 
-    Route::get('/profile/{function?}', [UserController::class, 'profile'])->middleware('verified')->name('profile');
+    Route::get('/profile/{function?}', [UserController::class, 'show'])->middleware('verified')->name('profile');
 
-    Route::post('/profile/change/passwork', [UserController::class, 'changePassword'])->name('profile-password');
+    Route::post('/profile/change/password', [UserController::class, 'changePassword'])->name('profile-password');
 });
 
-Route::get('mail', function () {
-    return Hash::make('adminadmin');
-});
+Route::get('ohoho', function () {
+})->name('test');
 
 Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::get('admin/view/course', [AdminController::class, 'courses'])->name('admin');
@@ -126,9 +128,4 @@ Route::get('handle', function (Request $request) {
     }
 })->name('handle');
 
-Route::get('crawl', [CrawlController::class, 'index'])->name('crow');
-
-Route::get('crawl2', function () {
-   ProcessCourse::dispatch('https://coderstape.com/series/15-new-in-laravel-7');
-   return 'update course';
-});
+Route::get('repository', [UserController::class, 'getAll'])->name('repository');

@@ -11,14 +11,14 @@
                     <div class="btn-group-vertical p-3">
                         <a @if($function == 'info') class="btn btn-primary font-weight-bold"
                            @else class="btn font-weight-bold" @endif
-                           href="{{route('profile', 'info')}}">
+                           href="{{ route('test', 'info') }}">
                             <i class="far fa-id-card mr-2"></i>
                             Thông tin
                         </a>
 
                         <a @if($function == 'password') class="btn btn-primary font-weight-bold"
                            @else class="btn font-weight-bold" @endif
-                           href="{{route('profile', 'password')}}">
+                           href="{{ route('test', 'password') }}">
                             <i class="fas fa-key mr-2"></i>
                             Đổi mật khẩu
                         </a>

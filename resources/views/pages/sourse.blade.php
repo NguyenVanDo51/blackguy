@@ -17,8 +17,10 @@
                 <span>Lượt thích: {{$course->like}}</span>
                 <span class="mx-3">Lượt xem: {{$course->view}}</span>
                 <span>Số bai hoc: {{$course->lessions()->count()}}</span>
+{{--                Neu khoa hoc co bai học --}}
                 @if(!empty($course->lessions()->first()))
                     <p class="my-2">
+{{--                Nếu người dùng đã đăng nhập--}}
                     @if($course->users()->get()->contains(Auth::user()))
                         <div class="progress my-3">
                             <div class="progress-bar" role="progressbar" style="width: {{$percent}}%;"
@@ -27,19 +29,16 @@
                                 {{$percent}}%
                             </div>
                         </div>
-                        <a href="{{ route('lession', ['course' => $course->id, 'lession' => Auth::user()->courses()->where('course_id', $course->id)->first()->pivot->latest]) }}"
+                        <a href="{{ route('lession.index', ['course' => $course->id, 'lession' => Auth::user()->courses()->where('course_id', $course->id)->first()->pivot->latest]) }}"
                            class="btn btn-primary mr-2">
                             Tiếp tục học
                         </a>
                     @else
                         <a href="{{ route('lession', ['course' => $course->id, 'lession' => $course->lessions()->first('id')->id]) }}"
                            class="btn btn-primary mr-2">
-                            Đăng kí ngay
+                            Tham gia học
                         </a>
                     @endif
-                    @guest
-                        <label for="" class="text-danger"> * Bạn cần đăng nhập để tiếp tục </label>
-                        @endguest
                         </p>
                     @else
                         <div class="my-3 mr-2">
@@ -66,7 +65,7 @@
 
             <div class="col-12 col-md-8 my-5 my-md-0">
                 <h3>Giới thiệu về khóa học</h3>
-                <p>{{$course->name}}</p>
+                <p>{{$course->description}}</p>
             </div>
 
             @if(!empty($course->lessions()->first()))

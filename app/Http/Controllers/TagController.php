@@ -3,13 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 class TagController extends Controller
 {
-    public function show()
+    protected $tagRepository;
+
+    public function __construct(TagRepository $tagRepository)
+    {
+        $this->tagRepository = $tagRepository;
+    }
+
+    /**
+     * Get tags show in home
+     * @return bool
+     */
+    public function getIsShow()
+    {
+        return $this->tagRepository->getIsShow();
+    }
+
+    public function index()
+    {
+        return $this->tagRepository->getAll();
+    }
+
+    public function show(Tag $tag)
+    {
+        $courses = $tag->courses()->paginate(5);
+
+        return view('pages.tag', [
+            'courses' => $courses,
+            'tag' => $tag
+        ]);
+    }
+
+    public function countCount()
     {
         $tags = Tag::query()->withCount('courses')->paginate(10);
 

@@ -9,9 +9,6 @@
 
     <title>@yield('title')</title>
 
-    <!-- Jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
     <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -46,9 +43,9 @@
             @foreach(App\Models\Category::query()->with('tags')->get() as $category)
 
                 <li class="nav-item category mr-4">
-                    <a href="{{route('categories', $category->id)}}"
+                    <a href="{{route('category.show', $category->id)}}"
                        class="nav-link d-flex justify-content-between text-dark">
-                        {{$category->name}}
+                        {{ $category->name }}
                         @if($category->tags->count() > 0)
                             <i class="fas fa-angle-down"></i>
                         @endif
@@ -56,8 +53,8 @@
                     @if($category->tags->count() > 0)
                         <div class="sub-category justify-content-center">
                             @foreach($category->tags as $tag)
-                                <a href="{{route('tags', $tag->id)}}" class="sub-category-tag mt-2 mx-5">
-                                    {{$tag->name}}
+                                <a href="{{ route('tags', $tag->id) }}" class="sub-category-tag mt-2 mx-5">
+                                    {{ $tag->name }}
                                 </a>
                             @endforeach
                         </div>
@@ -67,7 +64,7 @@
             @endforeach
         </ul>
 
-        <form class="form-inline my-2 my-lg-0" action="{{route('search')}}" method="get">
+        <form class="form-inline my-2 my-lg-0" action="{{ route('course.search') }}" method="get">
             @csrf
             <input class="form-control mr-sm-2" type="search" name="search" placeholder="Tìm kiếm" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
@@ -77,14 +74,14 @@
             <div class="btn-group">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
-                    {{Auth::user()->name}}
+                    {{ Auth::user()->name }}
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a href="{{route('profile')}}" class="dropdown-item" type="button">Trang cá nhân</a>
+                    <a href="{{ route('test') }}" class="dropdown-item" type="button">Trang cá nhân</a>
                     <div class="dropdown-divider"></div>
 
                     @can('admin')
-                        <a href="{{route('admin')}}" class="dropdown-item">Quản lý web</a>
+                        <a href="{{ route('admin') }}" class="dropdown-item">Quản lý web</a>
                     @endcan
 
                     <div class="dropdown-divider"></div>

@@ -1,6 +1,6 @@
 <div class="container-fluid">
     @foreach($courses as $course)
-        <a class="row mt-3" style="max-height: {{$height}}rem;" href="{{route('course', $course->id )}}">
+        <a class="row mt-3" style="max-height: {{$height}}rem;" href="{{route('course.show', $course->id )}}">
             <div class="col-3">
                 <img class="img-fluid" src="{{$course->img}}" alt="">
             </div>

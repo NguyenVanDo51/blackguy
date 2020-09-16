@@ -20,7 +20,6 @@
                     </a>
                 @endif
             </div>
-
         </form>
         <a class="btn btn-primary float-right mb-2" href="{{route('view-add-course')}}">Thêm khóa học</a>
     </div>
@@ -42,19 +41,24 @@
         <tbody>
         @foreach( $courses as $course)
             <tr>
-                <td>{{$course->name}}</td>
-                <td>{{$course->lessions()->count()}}</td>
                 <td>
-                    <img src="{{$course->img}}" alt="" width="100" height="60">
+                    <a href="{{route('course.show', $course->id)}}"
+                       class="text-dark font-weight-bold">{{$course->name}}</a>
+                </td>
+
+                <td>{{ $course->lessions()->count() }}</td>
+                <td>
+                    <img src="{{ $course->img }}" alt="" width="100" height="60">
                 </td>
                 <td>
-                    @foreach($course->tags()->select('name')->get() as $tag)
-                        <button class="btn btn-primary my-1 btn-sm text-lowercase">{{$tag->name}}</button>
+                    @foreach($course->tags()->get() as $tag)
+                        <a href="{{ route('tag.show', $tag->id) }}"
+                           class="btn btn-primary my-1 btn-sm text-lowercase">{{$tag->name}}</a>
                     @endforeach
                 </td>
-                <td>{{$course->category()->first('name')->name ?? "Web"}}</td>
-                <td>{{$course->view ?? ''}}</td>
-                <td>{{$course->like ?? ''}}</td>
+                <td>{{ $course->category()->first('name')->name ?? "Web"}}</td>
+                <td>{{ $course->view ?? '' }}</td>
+                <td>{{ $course->like ?? '' }}</td>
                 <td>
                     @if($course->crawl_url)
                         Crawl

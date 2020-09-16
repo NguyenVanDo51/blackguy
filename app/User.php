@@ -4,7 +4,7 @@ namespace App;
 
 use App\Models\Course;
 use App\Models\Lession;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
