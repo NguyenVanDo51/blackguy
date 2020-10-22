@@ -23,4 +23,13 @@ class TagRepository extends EloquentRepository implements RepositoryInterface
 
         return false;
     }
+
+    function getWithPaginate($number)
+    {
+        try {
+            return $this->_model->paginate($number);
+        } catch (\Exception $exception) {
+            logger($exception->getMessage());
+        }
+    }
 }

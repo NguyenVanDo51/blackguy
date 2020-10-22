@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Repositories\TagRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -26,14 +27,29 @@ class TagController extends Controller
         return $this->tagRepository->getIsShow();
     }
 
+    /**
+     * @return bool|mixed
+     */
     public function index()
     {
-        return $this->tagRepository->getAll();
+        $tags = $this->tagRepository->getWithPaginate(10);
+//        $tags = Tag::query()->paginate(10);
+        return view('pages.admin.tag', compact('tags')) ;
     }
 
+    /**
+     * @param Tag $tag
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function show(Tag $tag)
     {
-        $courses = $tag->courses()->paginate(5);
+        try {
+            $courses = $tag->courses()->paginate(5);
+        } catch (Exception $e) {
+            logger("Error when get tag ", [
+                "error" => $e->getMessage()
+            ]);
+        }
 
         return view('pages.tag', [
             'courses' => $courses,
@@ -41,6 +57,9 @@ class TagController extends Controller
         ]);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function countCount()
     {
         $tags = Tag::query()->withCount('courses')->paginate(10);
@@ -48,18 +67,26 @@ class TagController extends Controller
         return view('pages.admin.tag', compact('tags'));
     }
 
+    /**
+     * @param Tag $tag
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function delete(Tag $tag)
     {
         try {
             $tag->delete();
             $tag->courses()->detach();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage();
         }
 
         return back();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function add(Request $request)
     {
         $tags = Tag::query()->pluck('name');
@@ -73,13 +100,17 @@ class TagController extends Controller
             Tag::query()->create([
                 'name' => $request->input('tag')
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage();
         }
 
         return back();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function showHome(Request $request)
     {
         $tagsRequest = $request->input('tag');

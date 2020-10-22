@@ -102,7 +102,7 @@
             const lession_id = $('#lession_id').val();
             const total = player.getDuration();
             // console.log(total);
-            $.get('http://blackguy.test/handle', {timer: timer, total: total, lession_id: lession_id});
+            $.get('http://bl.test/handle', {timer: timer, total: total, lession_id: lession_id});
         }
     </script>
 

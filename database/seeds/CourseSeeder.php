@@ -12,11 +12,6 @@ class CourseSeeder extends Seeder
      */
     public function run()
     {
-//        Course::query()->insert([
-//            'name' => 'PHP nâng cao',
-//            'description' => 'Khóa học PHP nâng cao',
-//            'img' => 'https://www.dammio.com/wp-content/uploads/2018/09/php_code_demo.jpg'
-//        ]);
         factory(App\Models\Course::class)
             ->create()
             ->each(function ($course) {

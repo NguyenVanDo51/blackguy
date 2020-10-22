@@ -34,7 +34,7 @@
                             Tiếp tục học
                         </a>
                     @else
-                        <a href="{{ route('lession', ['course' => $course->id, 'lession' => $course->lessions()->first('id')->id]) }}"
+                        <a href="{{ route('lession.index', ['course' => $course->id, 'lession' => $course->lessions()->first('id')->id]) }}"
                            class="btn btn-primary mr-2">
                             Tham gia học
                         </a>

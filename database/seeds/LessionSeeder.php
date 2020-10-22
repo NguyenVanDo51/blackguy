@@ -12,8 +12,5 @@ class LessionSeeder extends Seeder
      */
     public function run()
     {
-//        Lession::query()->insert([
-//
-//        ]);
     }
 }

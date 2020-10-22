@@ -40,9 +40,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/change/password', [UserController::class, 'changePassword'])->name('profile-password');
 });
 
-Route::get('ohoho', function () {
-})->name('test');
-
 Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::get('admin/view/course', [AdminController::class, 'courses'])->name('admin');
 
@@ -84,7 +81,7 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::post('admin/users/password/{user}', [UserController::class, 'changePasswordAdmin'])->name('admin-user-edit');
 
 // Tags
-    Route::get('admin/tags/view', [TagController::class, 'show'])->name('admin-tag-view');
+    Route::get('admin/tags/view', [TagController::class, 'index'])->name('admin-tag-view');
 
     Route::get('admin/tags/delete/{tag}', [TagController::class, 'delete'])->name('admin-tag-edit');
 
@@ -105,13 +102,11 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
 
     Route::post('admin/crawl/course/{job_id}/edit', [CrawlController::class, 'edit'])->name('admin-crawl-edit');
 
-
 });
 
 Route::get('handle', function (Request $request) {
     if ($request->ajax()) {
         // ghi thoi gian phat video
-
         Auth::user()->lessions()
             ->where('lession_id', $request->lession_id)
             ->update([

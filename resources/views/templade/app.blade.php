@@ -31,7 +31,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light mb-2 mb-5">
-    <a class="navbar-brand" href="{{route('home')}}">BLACKGUY</a>
+    <a class="navbar-brand ml-5" href="{{route('home')}}">BLACKGUY</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -64,20 +64,14 @@
             @endforeach
         </ul>
 
-        <form class="form-inline my-2 my-lg-0" action="{{ route('course.search') }}" method="get">
-            @csrf
-            <input class="form-control mr-sm-2" type="search" name="search" placeholder="Tìm kiếm" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
-        </form>
-
         @auth
-            <div class="btn-group">
+            <div class="btn-group position-absolute" style="right: 70px;">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                     {{ Auth::user()->name }}
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a href="{{ route('test') }}" class="dropdown-item" type="button">Trang cá nhân</a>
+                    <a href="{{ route('profile') }}" class="dropdown-item" type="button">Trang cá nhân</a>
                     <div class="dropdown-divider"></div>
 
                     @can('admin')
