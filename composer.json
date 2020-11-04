@@ -16,9 +16,7 @@
         "laravel/framework": "^7.24",
         "laravel/horizon": "^4.3",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.1",
-        "predis/predis": "^1.1",
-        "ext-redis": "^5.1.1"
+        "laravel/ui": "^2.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.4",

@@ -90,7 +90,9 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::post('admin/tags/home', [TagController::class, 'showHome'])->name('admin-tag-home');
 
 // Crawl
-    Route::get('/admin/crawl/course', [CrawlController::class, 'index'])->name('admin-crawl-view');
+    Route::get('/admin/crawl/course', function() {
+        return "I'm comming!";
+    })->name('admin-crawl-view');
 
     Route::post('admin/crawl/course/handle', [CrawlController::class, 'create'])->name('admin-crawl-handle');
 
